@@ -1,0 +1,259 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'SUSE Mono', monospace;
+  color: rgba(255,255,255,0.8);
+  overflow-y: auto;
+  min-height: 100vh;
+  background: #111;
+}
+
+/* Фон */
+.background-layer {
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: url("../assets/images/homebg.png") center/cover no-repeat;
+  filter: blur(4px) brightness(0.7);
+  z-index: -2;
+}
+.overlay {
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: rgba(0,0,0,0.35);
+  z-index: -1;
+}
+
+/* Хедер */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: rgba(17,17,17,0.85);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+.header .logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+}
+.header .logo:hover { color: #fff; }
+.nav a {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 10px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.nav a:hover { color: #fff; }
+.cta-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.cta-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* Контейнер формы */
+.create-container {
+  background: rgba(17,17,17,0.85);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+  max-width: 540px;
+  margin: 60px auto;
+  padding: 40px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  backdrop-filter: blur(8px);
+}
+
+.create-container h1 {
+  font-size: 28px;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.subtitle {
+  font-size: 16px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 30px;
+}
+
+/* Поля формы */
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: left;
+}
+.create-form label {
+  font-size: 0.85em;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: -6px;
+}
+.create-form input,
+.create-form select,
+.create-form textarea {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  font-family: 'SUSE Mono', monospace;
+  outline: none;
+  transition: all 0.3s ease;
+}
+.create-form input:focus,
+.create-form select:focus,
+.create-form textarea:focus {
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(0,0,0,0.5);
+}
+.create-form select option {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+/* Загрузка изображения */
+.image-upload-area {
+  border: 2px dashed rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.image-upload-area:hover,
+.image-upload-area.drag-over {
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.03);
+}
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.9em;
+}
+.upload-icon {
+  font-size: 2em;
+  color: rgba(255,255,255,0.3);
+  line-height: 1;
+}
+.upload-hint {
+  font-size: 0.75em;
+  color: rgba(255,255,255,0.25);
+}
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.remove-image-btn {
+  margin-top: 10px;
+  padding: 6px 16px;
+  border: 1px solid rgba(255,80,80,0.4);
+  background: transparent;
+  color: rgba(255,80,80,0.8);
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'SUSE Mono', monospace;
+  font-size: 0.85em;
+  transition: all 0.2s;
+}
+.remove-image-btn:hover {
+  background: rgba(255,80,80,0.15);
+  color: #ff5050;
+}
+
+/* Кнопка отправки */
+.create-form button[type="submit"] {
+  padding: 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  font-weight: bold;
+  font-family: 'SUSE Mono', monospace;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+.create-form button[type="submit"]:hover {
+  background: #fff;
+  color: #111;
+}
+.create-form button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Кнопка назад */
+.back-btn {
+  display: inline-block;
+  margin-top: 20px;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: all 0.3s ease;
+}
+.back-btn:hover {
+  color: #fff;
+}
+
+/* Плавное появление */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.fade-in-element.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Выпадающее меню */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(17, 17, 17, 0.9);
+  color: #fff;
+  padding: 20px;
+  display: none;
+  min-width: 280px;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.dropdown-menu.show { display: block; }
+.dropdown-menu .dropdown-section { margin-bottom: 15px; }
+.dropdown-menu .dropdown-section h4 { margin-bottom: 8px; font-size: 0.85em; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.5px; }
+.dropdown-menu .dropdown-section ul { list-style: none; padding-left: 0; }
+.dropdown-menu .dropdown-section ul li a { color: rgba(255,255,255,0.6); text-decoration: none; display: block; padding: 4px 0; transition: color 0.2s ease; }
+.dropdown-menu .dropdown-section ul li a:hover { color: #fff; }

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Личный кабинет | TrashDream's</title>
+  <link rel="icon" type="image/x-icon" href="../assets/images/logo.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <a class="logo" href="../home/index.html">TrashDream's</a>
+    <nav class="nav">
+      <a href="#" id="menu-id">Меню</a>
+      <a href="../user_projects/index.html">Мои проекты</a>
+      <a href="../balance/index.html">Мой баланс</a>
+    </nav>
+    <a class="cta-btn" href="../profile/index.html">Профиль</a>
+  </header>
+
+  <main class="profile-page">
+
+    <!-- Карточка пользователя -->
+    <section class="profile-card">
+      <div class="avatar-wrapper">
+        <div class="avatar" id="avatar-letter">?</div>
+      </div>
+      <div class="profile-info">
+        <h1 id="profile-username">Загрузка...</h1>
+        <p class="profile-email" id="profile-email"></p>
+        <div class="profile-meta">
+          <span class="meta-item" id="profile-date">На платформе с ...</span>
+          <span class="meta-item" id="profile-balance">Баланс: 0 ₽</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Статистика -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <h3 id="stat-total">0</h3>
+        <p>Всего проектов</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="stat-active">0</h3>
+        <p>Активных</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="stat-raised">0 ₽</h3>
+        <p>Собрано средств</p>
+      </div>
+    </section>
+
+    <!-- Редактирование профиля -->
+    <section class="edit-section">
+      <h2>Редактировать профиль</h2>
+      <form id="edit-form" class="edit-form">
+        <div class="form-group">
+          <label for="edit-username">Имя пользователя</label>
+          <input type="text" id="edit-username" placeholder="Имя пользователя">
+        </div>
+        <div class="form-group">
+          <label for="edit-email">Электронная почта</label>
+          <input type="email" id="edit-email" placeholder="Email">
+        </div>
+        <div class="form-divider"></div>
+        <h3>Сменить пароль</h3>
+        <div class="form-group">
+          <label for="edit-old-pass">Текущий пароль</label>
+          <input type="password" id="edit-old-pass" placeholder="Текущий пароль">
+        </div>
+        <div class="form-group">
+          <label for="edit-new-pass">Новый пароль</label>
+          <input type="password" id="edit-new-pass" placeholder="Новый пароль (мин. 6 символов)">
+        </div>
+        <button type="submit" class="save-btn">Сохранить изменения</button>
+      </form>
+    </section>
+
+    <!-- Мои проекты (превью) -->
+    <section class="my-projects-section">
+      <div class="section-header">
+        <h2>Мои проекты</h2>
+        <a href="../user_projects/index.html" class="view-all-link">Все проекты →</a>
+      </div>
+      <div class="projects-grid" id="projects-grid"></div>
+      <p class="empty-msg hidden" id="no-projects">У вас пока нет проектов. <a href="../create_proj/index.html">Создать первый?</a></p>
+    </section>
+
+    <!-- Кнопка выхода -->
+    <section class="logout-section">
+      <button id="logout-btn" class="logout-btn">Выйти из аккаунта</button>
+    </section>
+
+  </main>
+
+  <!-- Выпадающее меню -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <div class="dropdown-section">
+      <h4>Рекомендации</h4>
+      <ul>
+        <li><a href="../new_projects/index.html">Новые проекты</a></li>
+        <li><a href="../more_discussed/index.html">Самые обсуждаемые</a></li>
+        <li><a href="../redaction_choise/index.html">Выбор редакции</a></li>
+      </ul>
+    </div>
+    <div class="dropdown-section">
+      <h4>Навигация</h4>
+      <ul>
+        <li><a href="../home/index.html">Главная</a></li>
+        <li><a href="../all_projects/index.html">Все проекты</a></li>
+        <li><a href="../create_proj/index.html">Создать проект</a></li>
+        <li><a href="../profile/index.html">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

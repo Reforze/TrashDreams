@@ -1,0 +1,9 @@
+# Database
+project_root/data/trashdreams.db
+
+# Uploads
+project_root/uploads/*
+!project_root/uploads/.gitkeep
+
+# Claude
+.claude/

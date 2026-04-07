@@ -1,0 +1,165 @@
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'SUSE Mono', monospace;
+  color: rgba(255, 255, 255, 0.9);
+  background: #111 url("../assets/images/homebg.png") center/cover no-repeat fixed;
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+/* Background layers */
+.background-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #111 url("../assets/images/homebg.png") center/cover no-repeat;
+  filter: blur(6px);
+  z-index: -2;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  z-index: -1;
+}
+
+/* Back button */
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  text-decoration: none;
+  z-index: 10;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'SUSE Mono', monospace;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* Auth container */
+.auth-container {
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(20,20,20,0.85);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  max-width: 420px;
+  margin: 120px auto;
+  padding: 40px;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+}
+
+.auth-container h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: rgba(255,255,255,0.5);
+}
+
+/* Form fields */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.auth-form input {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.4);
+  color: #fff;
+  outline: none;
+  font-family: 'SUSE Mono', monospace;
+  transition: border-color 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* Button */
+.auth-btn {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'SUSE Mono', monospace;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Alt text */
+.alt-text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+}
+
+.alt-text a {
+  color: rgba(255,255,255,0.8);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.alt-text a:hover {
+  color: #fff;
+}
+
+/* Fade-in animation */
+.fade-in-element {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.fade-in-element.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Hidden */
+.hidden {
+  display: none;
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель | TrashDream's</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="../assets/images/logo.ico">
+</head>
+<body>
+
+  <header class="header">
+    <a class="logo" href="../home/index.html">TrashDream's</a>
+    <nav class="nav">
+      <a href="../home/index.html">Главная</a>
+      <a href="../admin/index.html" class="active-nav">Админ-панель</a>
+    </nav>
+    <a class="cta-btn" href="../profile/index.html">Профиль</a>
+  </header>
+
+  <main class="admin-page">
+
+    <!-- Статистика -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <h3 id="stat-total">0</h3>
+        <p>Всего проектов</p>
+      </div>
+      <div class="stat-card stat-review">
+        <h3 id="stat-review">0</h3>
+        <p>На модерации</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="stat-active">0</h3>
+        <p>Активных</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="stat-closed">0</h3>
+        <p>Закрытых</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="stat-users">0</h3>
+        <p>Пользователей</p>
+      </div>
+      <div class="stat-card">
+        <h3 id="stat-raised">0</h3>
+        <p>Собрано средств</p>
+      </div>
+    </section>
+
+    <!-- Фильтры -->
+    <section class="filter-bar">
+      <input type="text" id="search-input" placeholder="Поиск проектов...">
+      <select id="status-filter">
+        <option value="all">Все статусы</option>
+        <option value="review">На модерации</option>
+        <option value="active">Активные</option>
+        <option value="closed">Закрытые</option>
+      </select>
+    </section>
+
+    <!-- Таблица проектов -->
+    <section class="projects-table-wrap">
+      <table class="projects-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Изображение</th>
+            <th>Название</th>
+            <th>Автор</th>
+            <th>Категория</th>
+            <th>Статус</th>
+            <th>Цель</th>
+            <th>Собрано</th>
+            <th>Действия</th>
+          </tr>
+        </thead>
+        <tbody id="projects-tbody"></tbody>
+      </table>
+      <p id="no-projects" class="empty-msg" style="display:none;">Проектов не найдено</p>
+    </section>
+
+  </main>
+
+  <!-- Модальное окно деталей -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span id="modal-close">&times;</span>
+      <img id="modal-img" src="" alt="">
+      <h3 id="modal-title"></h3>
+      <div id="modal-info"></div>
+      <div class="modal-actions" id="modal-actions"></div>
+    </div>
+  </div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

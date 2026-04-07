@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Создать проект | TrashDream's</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="../assets/images/logo.ico">
+</head>
+<body>
+
+  <!-- Хедер -->
+  <header class="header">
+    <a class="logo" href="../home/index.html">TrashDream's</a>
+    <nav class="nav">
+      <a href="#" id="menu-id">Меню</a>
+      <a href="../user_projects/index.html">Мои проекты</a>
+      <a href="../balance/index.html">Мой баланс</a>
+    </nav>
+    <a class="cta-btn" href="../autourn/index.html">Авторизация</a>
+  </header>
+
+  <div class="background-layer"></div>
+  <div class="overlay"></div>
+
+  <div class="create-container fade-in-element">
+    <h1>Создать новый проект</h1>
+    <p class="subtitle">Воплоти свою безумную идею в жизнь</p>
+
+    <form class="create-form" id="create-form">
+      <label for="title">Название проекта</label>
+      <input type="text" id="title" placeholder="Название" required>
+
+      <label for="category">Категория</label>
+      <select id="category" required>
+        <option value="">Выберите категорию</option>
+        <option value="fun">Развлечения</option>
+        <option value="food">Еда</option>
+        <option value="tech">Технологии</option>
+        <option value="books">Книги</option>
+        <option value="movies">Фильмы</option>
+        <option value="games">Игры</option>
+        <option value="other">Другое</option>
+      </select>
+
+      <label for="description">Описание проекта</label>
+      <textarea id="description" rows="5" placeholder="Опиши проект..." required></textarea>
+
+      <label for="goal">Цель (воображаемо)</label>
+      <input type="number" id="goal" placeholder="Сумма в рублях" required>
+
+      <label for="image">Изображение проекта</label>
+      <div class="image-upload-area" id="upload-area">
+        <input type="file" id="image" accept="image/*" hidden>
+        <div class="upload-placeholder" id="upload-placeholder">
+          <span class="upload-icon">+</span>
+          <span>Нажмите или перетащите изображение</span>
+          <span class="upload-hint">JPEG, PNG, GIF, WebP. Макс. 5 МБ</span>
+        </div>
+        <img id="image-preview" src="" alt="" class="image-preview" style="display:none;">
+        <button type="button" id="remove-image" class="remove-image-btn" style="display:none;">Убрать</button>
+      </div>
+
+      <button type="submit" id="submit-btn">Создать проект</button>
+    </form>
+
+    <a href="../home/index.html" class="back-btn">Назад на главную</a>
+  </div>
+
+  <!-- Выпадающее меню -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <div class="dropdown-section">
+      <h4>Рекомендации</h4>
+      <ul>
+        <li><a href="../new_projects/index.html">Новые проекты</a></li>
+        <li><a href="../more_discussed/index.html">Самые обсуждаемые</a></li>
+        <li><a href="../redaction_choise/index.html">Выбор редакции</a></li>
+      </ul>
+    </div>
+    <div class="dropdown-section">
+      <h4>Навигация</h4>
+      <ul>
+        <li><a href="../home/index.html">Главная</a></li>
+        <li><a href="../all_projects/index.html">Все проекты</a></li>
+        <li><a href="../create_proj/index.html">Создать проект</a></li>
+        <li><a href="../profile/index.html">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

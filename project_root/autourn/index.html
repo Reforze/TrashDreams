@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вход | TrashDream's</title>
+  <link rel="icon" type="image/x-icon" href="../assets/images/logo.ico">
+
+  <!-- Шрифты -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" 
+    rel="stylesheet">
+
+  <!-- Подключение CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Фон -->
+  <div class="background-layer"></div>
+  <div class="overlay"></div>
+
+  <!-- Кнопка назад -->
+  <a href="../home/index.html" class="back-btn">← Назад на главную</a>
+
+  <!-- Контейнер авторизации -->
+  <div class="auth-container fade-in-element">
+    <h1>Добро пожаловать в TrashDream’s</h1>
+    <p class="subtitle">Войди, чтобы запускать безумие 🚀</p>
+
+    <!-- Форма входа -->
+    <form class="auth-form" id="login-form">
+      <input type="email" placeholder="Электронная почта" required>
+      <input type="password" placeholder="Пароль" required>
+      <button type="submit" class="auth-btn">Войти</button>
+      <p class="alt-text">Нет аккаунта? 
+        <a href="#" id="show-register">Создать</a>
+      </p>
+    </form>
+
+    <!-- Форма регистрации -->
+    <form class="auth-form hidden" id="register-form">
+      <input type="text" placeholder="Имя пользователя" required>
+      <input type="email" placeholder="Электронная почта" required>
+      <input type="password" placeholder="Пароль" required>
+      <button type="submit" class="auth-btn">Зарегистрироваться</button>
+      <p class="alt-text">Уже есть аккаунт? 
+        <a href="#" id="show-login">Войти</a>
+      </p>
+    </form>
+  </div>
+
+  <!-- JS -->
+  <script src="../assets/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

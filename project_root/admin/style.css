@@ -1,0 +1,403 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'SUSE Mono', monospace;
+  color: rgba(255, 255, 255, 0.8);
+  min-height: 100vh;
+  background: url("../assets/images/homebg.png") center/cover no-repeat fixed;
+  background-color: #111;
+}
+
+/* Хедер */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: rgba(17,17,17,0.85);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+}
+.header .logo {
+  font-size: 1.5em;
+  font-weight: bold;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.8);
+}
+.header .logo:hover { color: #fff; }
+.nav a {
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0 10px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.nav a:hover, .nav a.active-nav {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+.cta-btn {
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  transition: 0.3s;
+  background: rgba(255,255,255,0.05);
+}
+.cta-btn:hover { background: rgba(255,255,255,0.15); }
+
+/* Основная страница */
+.admin-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Статистика */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+.stat-card {
+  background: rgba(20,20,20,0.85);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  transition: transform 0.3s;
+}
+.stat-card:hover { transform: translateY(-3px); }
+.stat-card h3 {
+  font-size: 1.8em;
+  color: #fff;
+  margin-bottom: 4px;
+}
+.stat-card p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.85em;
+}
+.stat-review { border-color: rgba(255,200,50,0.3); }
+.stat-review h3 { color: #ffc832; }
+
+/* Фильтры */
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.filter-bar input,
+.filter-bar select {
+  background: rgba(20,20,20,0.85);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'SUSE Mono', monospace;
+  font-size: 0.9em;
+  transition: border-color 0.3s;
+}
+.filter-bar input { flex: 1; }
+.filter-bar input:focus,
+.filter-bar select:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.4);
+}
+
+/* Таблица */
+.projects-table-wrap {
+  overflow-x: auto;
+}
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+.projects-table thead th {
+  background: rgba(20,20,20,0.9);
+  padding: 12px 10px;
+  text-align: left;
+  color: rgba(255,255,255,0.6);
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  white-space: nowrap;
+}
+.projects-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.2s;
+}
+.projects-table tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+.projects-table tbody tr.row-review {
+  background: rgba(255,200,50,0.03);
+}
+.projects-table td {
+  padding: 10px;
+  vertical-align: middle;
+}
+.thumb {
+  width: 50px;
+  height: 35px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.title-cell {
+  font-weight: 600;
+  color: #fff;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Бейджи статуса */
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.status-active { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.2); }
+.status-review { background: rgba(255,200,50,0.15); color: #ffc832; border: 1px solid rgba(255,200,50,0.3); }
+.status-closed { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.1); }
+
+/* Кнопки в таблице */
+.actions-cell {
+  white-space: nowrap;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.btn-approve, .btn-reject, .btn-details {
+  padding: 5px 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-family: 'SUSE Mono', monospace;
+  transition: all 0.2s;
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+}
+.btn-approve {
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+}
+.btn-approve:hover {
+  background: #fff;
+  color: #000;
+}
+.btn-reject {
+  border-color: rgba(255,80,80,0.4);
+  color: rgba(255,80,80,0.8);
+}
+.btn-reject:hover {
+  background: rgba(255,80,80,0.15);
+  color: #ff5050;
+}
+.btn-details:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+/* Модалка */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(6px);
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.modal.show { display: flex; }
+.modal-content {
+  background: rgba(20,20,20,0.95);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  border-radius: 16px;
+  padding: 0;
+  text-align: left;
+  width: 90%;
+  max-width: 550px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  animation: popup 0.25s ease;
+  position: relative;
+}
+@keyframes popup {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.modal-content img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 16px 16px 0 0;
+}
+#modal-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  text-shadow: 0 0 6px rgba(0,0,0,0.8);
+  z-index: 10;
+}
+#modal-title {
+  padding: 20px 25px 10px;
+  font-size: 1.4em;
+}
+#modal-info {
+  padding: 0 25px 15px;
+  line-height: 1.8;
+  font-size: 0.95em;
+  color: rgba(255,255,255,0.7);
+}
+#modal-info strong { color: rgba(255,255,255,0.9); }
+.desc-text {
+  background: rgba(255,255,255,0.03);
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.06);
+  margin-top: 5px;
+  line-height: 1.5;
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 8px 0;
+}
+.progress {
+  height: 100%;
+  background: #fff;
+  border-radius: 3px;
+}
+
+/* Toggles */
+.toggle-row {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  color: rgba(255,255,255,0.7);
+}
+.toggle-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #fff;
+  cursor: pointer;
+}
+
+/* Modal action buttons */
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  padding: 15px 25px 25px;
+}
+.modal-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-family: 'SUSE Mono', monospace;
+  font-weight: 600;
+  transition: all 0.2s;
+  background: transparent;
+  color: rgba(255,255,255,0.8);
+}
+.modal-btn.approve {
+  border-color: rgba(255,255,255,0.4);
+  color: #fff;
+}
+.modal-btn.approve:hover {
+  background: #fff;
+  color: #000;
+}
+.modal-btn.reject {
+  border-color: rgba(255,200,50,0.4);
+  color: #ffc832;
+}
+.modal-btn.reject:hover {
+  background: rgba(255,200,50,0.15);
+}
+.modal-btn.delete {
+  border-color: rgba(255,80,80,0.4);
+  color: rgba(255,80,80,0.8);
+}
+.modal-btn.delete:hover {
+  background: rgba(255,80,80,0.15);
+  color: #ff5050;
+}
+
+/* Empty message */
+.empty-msg {
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  padding: 40px 20px;
+  font-size: 1.1em;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  color: #fff;
+  font-family: 'SUSE Mono', monospace;
+  font-size: 0.95em;
+  z-index: 3000;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.toast.error {
+  background: rgba(255, 80, 80, 0.2);
+  border: 1px solid rgba(255, 80, 80, 0.4);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }

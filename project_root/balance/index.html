@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>TreashDreams - Кошелек</title>
+    <link rel="icon" type="image/x-icon" href="../assets/images/logo.ico">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="../home/index.html">TrashDream's</a>
+    <nav class="nav">
+      <a href="#" id="menu-id">Меню</a>
+      <a href="../user_projects/index.html">Мои проекты</a>
+      <a href="../balance/index.html" class="active-nav">Мой баланс</a> 
+    </nav>
+    <a class="cta-btn" href="../create_proj/index.html">Создать проект +</a>
+  </header>
+
+  <main class="balance-page">
+    
+    <section class="wallet-section">
+        <div class="wallet-card">
+            <div class="card-chip"></div>
+            <div class="card-info">
+                <span class="card-label">Текущий баланс</span>
+                <h1 id="main-balance">0 ₽</h1>
+            </div>
+            <div class="card-footer">
+                <span class="card-holder">USER ID: 8800-555-35-35</span>
+                <span class="card-brand">TD Bank</span>
+            </div>
+            <div class="card-shine"></div>
+        </div>
+
+        <div class="wallet-actions">
+            <button id="deposit-btn" class="action-btn deposit">Пополнить 📥</button>
+            <button id="withdraw-btn" class="action-btn withdraw">Вывести 📤</button>
+        </div>
+    </section>
+
+    <section class="history-section">
+        <h3>История операций</h3>
+        <div class="history-filters">
+            <button class="filter-pill active" data-filter="all">Все</button>
+            <button class="filter-pill" data-filter="income">Доходы</button>
+            <button class="filter-pill" data-filter="expense">Расходы</button>
+        </div>
+        <div id="transaction-list" class="transaction-list">
+            </div>
+    </section>
+
+  </main>
+
+  <div id="modal" class="modal">
+    <div class="modal-content payment-modal">
+      <span id="modal-close">&times;</span>
+      <h3 id="modal-title">Операция</h3>
+      <div class="modal-body">
+          <input type="number" id="amount-input" placeholder="Введите сумму (₽)">
+          <button id="confirm-action-btn" class="confirm-btn">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Выпадающее меню -->
+  <div class="dropdown-menu" id="dropdown-menu">
+    <div class="dropdown-section">
+      <h4>Рекомендации</h4>
+      <ul>
+        <li><a href="../new_projects/index.html">Новые проекты</a></li>
+        <li><a href="../more_discussed/index.html">Самые обсуждаемые</a></li>
+        <li><a href="../redaction_choise/index.html">Выбор редакции</a></li>
+      </ul>
+    </div>
+    <div class="dropdown-section">
+      <h4>Навигация</h4>
+      <ul>
+        <li><a href="../home/index.html">Главная</a></li>
+        <li><a href="../all_projects/index.html">Все проекты</a></li>
+        <li><a href="../create_proj/index.html">Создать проект</a></li>
+        <li><a href="../profile/index.html">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
