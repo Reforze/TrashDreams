@@ -83,6 +83,47 @@ document.addEventListener("DOMContentLoaded", async () => {
   // 3. ФУНКЦИЯ СОЗДАНИЯ СЛАЙДЕРА И КАРТОЧЕК
   // ===================================
 
+  // Steam-style project cards
+  function createProjectCards(data, containerId) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    data.forEach(item => {
+      const card = document.createElement("div");
+      card.classList.add("steam-card");
+
+      const percent = item.goal ? Math.min((item.raised / item.goal) * 100, 100) : 0;
+
+      card.innerHTML = `
+        <div class="steam-card-img">
+          <img src="${item.img || '../assets/images/logo.ico'}" alt="${item.title}">
+          <div class="steam-card-overlay"></div>
+        </div>
+        <div class="steam-card-body">
+          <h3 class="steam-card-title">${item.title}</h3>
+          <div class="steam-card-stats">
+            <span class="steam-raised">${item.raised}₽</span>
+            <span class="steam-goal">из ${item.goal}₽</span>
+          </div>
+          <div class="steam-progress-bar">
+            <div class="steam-progress" style="width:${percent}%;"></div>
+          </div>
+          <div class="steam-card-footer">
+            <span class="steam-percent">${percent.toFixed(0)}%</span>
+            <a class="steam-detail-btn" href="../project_detail/index.html?id=${item.id}">Узнать подробнее</a>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener("click", (e) => {
+        if (e.target.closest('.steam-detail-btn')) return;
+        openProjectModal(item.id);
+      });
+      container.appendChild(card);
+    });
+  }
+
+  // Regular slider cards for books/movies/partners
   function createSliderSection(data, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
@@ -92,9 +133,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       card.classList.add("slider-card");
 
       let cardText = "";
-      if (item.type === 'project') {
-        cardText = `<p>Собрано: ${item.raised}₽</p>`;
-      } else if (item.type !== 'partner') {
+      if (item.type !== 'partner') {
         const shortDesc = item.desc && item.desc.length > 50 ? item.desc.substring(0, 47) + "..." : (item.desc || "");
         cardText = `<p>${shortDesc}</p>`;
       }
@@ -107,16 +146,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
 
-      if (item.type === 'project' && item.id) {
-        card.addEventListener("click", () => openProjectModal(item.id));
-      } else {
-        card.addEventListener("click", () => openModal(item));
-      }
+      card.addEventListener("click", () => openModal(item));
       container.appendChild(card);
     });
   }
 
-  createSliderSection(projectsData, "featured-projects");
+  createProjectCards(projectsData, "featured-projects");
   createSliderSection(booksData, "books-list");
   createSliderSection(moviesData, "movies-list");
   createSliderSection(partnersData, "partners-list");

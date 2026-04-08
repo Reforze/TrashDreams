@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Проект | TrashDream's</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SUSE+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/x-icon" href="../assets/images/logo.ico">
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="../home/index.html">TrashDream's</a>
+    <nav class="nav">
+      <a href="#" id="menu-id">Меню</a>
+      <a href="../user_projects/index.html">Мои проекты</a>
+      <a href="../balance/index.html">Мой баланс</a>
+    </nav>
+    <a class="cta-btn" href="../autourn/index.html">Авторизация</a>
+  </header>
+
+  <main class="detail-page">
+    <div class="detail-hero" id="detail-hero">
+      <img id="detail-img" src="" alt="">
+      <div class="detail-hero-overlay"></div>
+    </div>
+
+    <div class="detail-container">
+      <div class="detail-main">
+        <h1 id="detail-title">Загрузка...</h1>
+        <p class="detail-author" id="detail-author"></p>
+        <div class="detail-description" id="detail-description"></div>
+      </div>
+
+      <aside class="detail-sidebar">
+        <div class="detail-funding">
+          <div class="detail-raised" id="detail-raised">0₽</div>
+          <div class="detail-goal" id="detail-goal">из 0₽</div>
+          <div class="detail-progress-bar">
+            <div class="detail-progress" id="detail-progress"></div>
+          </div>
+          <div class="detail-percent" id="detail-percent">0%</div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="detail-btn" id="detail-support-btn">Поддержать проект</button>
+          <button class="detail-btn detail-btn-outline" id="detail-like-btn">
+            <span>&#9829;</span> <span id="detail-likes-count">0</span>
+          </button>
+          <button class="detail-btn detail-btn-outline" id="detail-fav-btn">
+            <span>&#9734;</span> Избранное
+          </button>
+        </div>
+
+        <div class="detail-support-form hidden" id="detail-support-form">
+          <input type="number" id="detail-support-amount" placeholder="Сумма ₽" min="1">
+          <button id="detail-support-send">Отправить</button>
+        </div>
+      </aside>
+    </div>
+
+    <section class="detail-comments">
+      <h3 id="detail-comments-title">Комментарии (0)</h3>
+      <div id="detail-comments-list"></div>
+      <div class="detail-comment-form hidden" id="detail-comment-form">
+        <textarea id="detail-comment-text" placeholder="Написать комментарий..." rows="3"></textarea>
+        <button id="detail-comment-send">Отправить</button>
+      </div>
+      <p class="detail-auth-hint hidden" id="detail-auth-hint">Авторизуйтесь чтобы комментировать</p>
+    </section>
+  </main>
+
+  <div class="dropdown-menu" id="dropdown-menu">
+    <div class="dropdown-section">
+      <h4>Рекомендации</h4>
+      <ul>
+        <li><a href="../new_projects/index.html">Новые проекты</a></li>
+        <li><a href="../more_discussed/index.html">Самые обсуждаемые</a></li>
+        <li><a href="../redaction_choise/index.html">Выбор редакции</a></li>
+      </ul>
+    </div>
+    <div class="dropdown-section">
+      <h4>Навигация</h4>
+      <ul>
+        <li><a href="../home/index.html">Главная</a></li>
+        <li><a href="../all_projects/index.html">Все проекты</a></li>
+        <li><a href="../create_proj/index.html">Создать проект</a></li>
+        <li><a href="../profile/index.html">Личный кабинет</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

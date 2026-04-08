@@ -49,20 +49,25 @@ function renderProjects(list) {
     const comments = project.comments_count || 0;
 
     const card = document.createElement("div");
-    card.classList.add("project-card");
+    card.classList.add("steam-card");
     card.innerHTML = `
-      <img src="${project.img || '../assets/images/logo.ico'}" alt="${project.title}">
-      <div class="card-content">
-        <span class="status-badge ${statusClass}">${statusText}</span>
-        <h3>${project.title}</h3>
-        <p>Цель: ${project.goal} руб.</p>
-        <div class="progress-bar">
-          <div class="progress" style="width:${percent}%"></div>
+      <div class="steam-card-img">
+        <img src="${project.img || '../assets/images/logo.ico'}" alt="${project.title}">
+        <div class="steam-card-overlay"></div>
+      </div>
+      <div class="steam-card-body">
+        <span class="steam-status-badge steam-${statusClass}">${statusText}</span>
+        <h3 class="steam-card-title">${project.title}</h3>
+        <div class="steam-card-stats">
+          <span class="steam-raised">${project.raised}₽</span>
+          <span class="steam-goal">из ${project.goal}₽</span>
         </div>
-        <p>Собрано: ${project.raised} руб. (${percent.toFixed(0)}%)</p>
-        <div class="card-meta">
-          <span>&#9829; ${likes}</span>
-          <span>&#128172; ${comments}</span>
+        <div class="steam-progress-bar">
+          <div class="steam-progress" style="width:${percent}%;"></div>
+        </div>
+        <div class="steam-card-footer">
+          <span class="steam-meta">&#9829; ${likes} &nbsp; &#128172; ${comments}</span>
+          <span class="steam-percent">${percent.toFixed(0)}%</span>
         </div>
       </div>
     `;

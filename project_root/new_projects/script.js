@@ -29,23 +29,33 @@ function renderProjects(list) {
     const likes = project.likes_count || 0;
     const comments = project.comments_count || 0;
     const card = document.createElement("div");
-    card.classList.add("project-card");
+    card.classList.add("steam-card");
+
     card.innerHTML = `
-      <img src="${project.img || '../assets/images/logo.ico'}" alt="${project.title}">
-      <div class="card-content">
-        <h3>${project.title}</h3>
-        <p>Цель: ${project.goal} руб.</p>
-        <div class="progress-bar">
-          <div class="progress" style="width:${percent}%"></div>
+      <div class="steam-card-img">
+        <img src="${project.img || '../assets/images/logo.ico'}" alt="${project.title}">
+        <div class="steam-card-overlay"></div>
+      </div>
+      <div class="steam-card-body">
+        <h3 class="steam-card-title">${project.title}</h3>
+        <div class="steam-card-stats">
+          <span class="steam-raised">${project.raised}₽</span>
+          <span class="steam-goal">из ${project.goal}₽</span>
         </div>
-        <p>Собрано: ${project.raised} руб. (${percent.toFixed(0)}%)</p>
-        <div class="card-meta">
-          <span>&#9829; ${likes}</span>
-          <span>&#128172; ${comments}</span>
+        <div class="steam-progress-bar">
+          <div class="steam-progress" style="width:${percent}%;"></div>
+        </div>
+        <div class="steam-card-footer">
+          <span class="steam-meta">&#9829; ${likes} &nbsp; &#128172; ${comments}</span>
+          <a class="steam-detail-btn" href="../project_detail/index.html?id=${project.id}">Подробнее</a>
         </div>
       </div>
     `;
-    card.addEventListener("click", () => openProjectModal(project.id));
+
+    card.addEventListener("click", (e) => {
+      if (e.target.closest('.steam-detail-btn')) return;
+      openProjectModal(project.id);
+    });
     container.appendChild(card);
   });
 }

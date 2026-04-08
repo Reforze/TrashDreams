@@ -136,69 +136,45 @@ function highlightActiveNav() {
 }
 
 // ============================================================
-// HAMBURGER MENU — replaces "Меню" with hamburger icon
+// DROPDOWN MENU — opens beneath "Меню" word
 // ============================================================
 function initHamburgerMenu() {
   const header = document.querySelector('.header');
   if (!header) return;
 
-  // Find the "Меню" link and replace it with hamburger
   const menuLink = document.querySelector(".nav a[id='menu-id']");
   if (!menuLink) return;
 
-  // Replace "Меню" text with hamburger icon + label
-  menuLink.innerHTML = `<span class="hamburger-icon"><span></span><span></span><span></span></span> Меню`;
-  menuLink.classList.add('hamburger-trigger');
+  // Style as dropdown trigger (keep text "Меню", add small arrow)
+  menuLink.innerHTML = `Меню <span class="menu-arrow">▾</span>`;
+  menuLink.classList.add('dropdown-trigger');
   menuLink.removeAttribute('href');
+  menuLink.style.position = 'relative';
 
-  // Create slide-out panel
-  const slideMenu = document.createElement('div');
-  slideMenu.className = 'slide-menu';
+  // Build dropdown panel
+  const dropPanel = document.createElement('div');
+  dropPanel.className = 'dd-menu';
 
-  // Build menu content from dropdown
   const dropdown = document.getElementById('dropdown-menu');
   if (dropdown) {
-    slideMenu.innerHTML = dropdown.innerHTML;
-    dropdown.remove(); // Remove old dropdown
+    dropPanel.innerHTML = dropdown.innerHTML;
+    dropdown.remove();
   }
 
-  // Add nav links to slide menu too
-  const nav = header.querySelector('.nav');
-  if (nav) {
-    const navSection = document.createElement('div');
-    navSection.className = 'dropdown-section';
-    navSection.innerHTML = '<h4>Разделы</h4><ul></ul>';
-    const ul = navSection.querySelector('ul');
-    nav.querySelectorAll('a').forEach(link => {
-      if (link.id === 'menu-id') return;
-      const li = document.createElement('li');
-      const a = link.cloneNode(true);
-      li.appendChild(a);
-      ul.appendChild(li);
-    });
-    slideMenu.insertBefore(navSection, slideMenu.firstChild);
-  }
-
-  // Overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'slide-menu-overlay';
-
-  document.body.appendChild(overlay);
-  document.body.appendChild(slideMenu);
+  menuLink.parentElement.style.position = 'relative';
+  menuLink.parentElement.insertBefore(dropPanel, menuLink.nextSibling);
 
   let isOpen = false;
 
   function toggle() {
     isOpen = !isOpen;
-    slideMenu.classList.toggle('open', isOpen);
-    overlay.classList.toggle('open', isOpen);
+    dropPanel.classList.toggle('open', isOpen);
     menuLink.classList.toggle('open', isOpen);
   }
 
   function close() {
     isOpen = false;
-    slideMenu.classList.remove('open');
-    overlay.classList.remove('open');
+    dropPanel.classList.remove('open');
     menuLink.classList.remove('open');
   }
 
@@ -208,9 +184,11 @@ function initHamburgerMenu() {
     toggle();
   });
 
-  overlay.addEventListener('click', close);
+  document.addEventListener('click', (e) => {
+    if (!dropPanel.contains(e.target) && e.target !== menuLink) close();
+  });
 
-  slideMenu.querySelectorAll('a').forEach(link => {
+  dropPanel.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', close);
   });
 }
@@ -293,107 +271,91 @@ function initDropdownMenu() {}
       border-radius: 1px;
     }
 
-    /* Hamburger menu trigger */
-    .hamburger-trigger {
+    /* Dropdown trigger */
+    .dropdown-trigger {
       cursor: pointer;
+      user-select: none;
       display: inline-flex !important;
       align-items: center;
-      gap: 8px;
-      padding: 4px 0;
-      user-select: none;
-    }
-    .hamburger-icon {
-      display: inline-flex;
-      flex-direction: column;
-      justify-content: center;
       gap: 4px;
-      width: 20px;
-      height: 16px;
-      position: relative;
     }
-    .hamburger-icon span {
-      display: block;
-      width: 100%;
-      height: 2px;
-      background: currentColor;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-      transform-origin: center;
+    .menu-arrow {
+      font-size: 0.7em;
+      transition: transform 0.3s ease;
+      display: inline-block;
     }
-    .hamburger-trigger.open .hamburger-icon span:nth-child(1) {
-      transform: rotate(45deg) translate(4px, 4px);
-    }
-    .hamburger-trigger.open .hamburger-icon span:nth-child(2) {
-      opacity: 0;
-    }
-    .hamburger-trigger.open .hamburger-icon span:nth-child(3) {
-      transform: rotate(-45deg) translate(4px, -4px);
+    .dropdown-trigger.open .menu-arrow {
+      transform: rotate(180deg);
     }
 
-    /* Slide menu panel */
-    .slide-menu {
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 280px;
-      height: 100vh;
+    /* Nav alignment fix */
+    .nav {
+      display: flex;
+      align-items: center;
+    }
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* Dropdown panel */
+    .dd-menu {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 0;
+      min-width: 300px;
       background: rgba(17,17,17,0.97);
       backdrop-filter: blur(14px);
-      border-right: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 16px 20px;
       z-index: 2000;
-      padding: 30px 24px;
-      overflow-y: auto;
-      transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.7);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-8px);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: none;
     }
-    .slide-menu.open {
-      left: 0;
+    .dd-menu.open {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
     }
-    .slide-menu::-webkit-scrollbar { width: 0; }
 
-    .slide-menu .dropdown-section {
-      margin-bottom: 20px;
+    .dd-menu .dropdown-section {
+      margin-bottom: 14px;
     }
-    .slide-menu .dropdown-section h4 {
-      font-size: 0.75em;
+    .dd-menu .dropdown-section:last-child {
+      margin-bottom: 0;
+    }
+    .dd-menu .dropdown-section h4 {
+      font-size: 0.72em;
       color: rgba(255,255,255,0.35);
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       padding-bottom: 6px;
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
-    .slide-menu .dropdown-section ul {
+    .dd-menu .dropdown-section ul {
       list-style: none;
       padding: 0;
     }
-    .slide-menu .dropdown-section ul li a {
+    .dd-menu .dropdown-section ul li a {
       display: block;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.65);
       text-decoration: none;
-      padding: 10px 12px;
+      padding: 8px 12px;
       border-radius: 8px;
-      font-size: 0.9em;
+      font-size: 0.88em;
       font-family: 'SUSE Mono', monospace;
       transition: all 0.2s;
     }
-    .slide-menu .dropdown-section ul li a:hover {
+    .dd-menu .dropdown-section ul li a:hover {
       background: rgba(255,255,255,0.08);
       color: #fff;
-    }
-
-    /* Overlay behind slide menu */
-    .slide-menu-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1999;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease;
-    }
-    .slide-menu-overlay.open {
-      opacity: 1;
-      pointer-events: auto;
     }
   `;
   document.head.appendChild(style);

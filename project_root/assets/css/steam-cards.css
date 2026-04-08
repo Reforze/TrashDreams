@@ -1,0 +1,162 @@
+/* ========== STEAM-STYLE PROJECT CARDS (shared) ========== */
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+  padding: 20px 60px 60px;
+  justify-items: center;
+  animation: fadeInCards 0.5s ease;
+}
+@keyframes fadeInCards {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.steam-card {
+  width: 320px;
+  height: 400px;
+  background: rgba(15,15,20,0.95);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.steam-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  border-color: rgba(255,255,255,0.2);
+}
+
+.steam-card-img {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+}
+.steam-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.steam-card:hover .steam-card-img img {
+  transform: scale(1.08);
+}
+.steam-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(transparent, rgba(15,15,20,0.95));
+  pointer-events: none;
+}
+
+.steam-card-body {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+.steam-card-title {
+  font-size: 1.15rem;
+  color: #fff;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.steam-card-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.steam-raised {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: #fff;
+}
+.steam-goal {
+  font-size: 0.82em;
+  color: rgba(255,255,255,0.35);
+}
+
+.steam-progress-bar {
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  overflow: hidden;
+  height: 6px;
+  margin-bottom: 12px;
+}
+.steam-progress {
+  height: 100%;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.7);
+  transition: width 0.6s ease;
+}
+
+.steam-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.steam-percent {
+  font-size: 0.85em;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+}
+.steam-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 0.8em;
+  color: rgba(255,255,255,0.35);
+}
+.steam-detail-btn {
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-size: 0.82em;
+  font-family: 'SUSE Mono', monospace;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.steam-detail-btn:hover {
+  background: #fff;
+  color: #000;
+  transform: translateY(-1px);
+}
+
+/* Extra info line (discussions, status badges, etc.) */
+.steam-card-extra {
+  font-size: 0.8em;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 6px;
+}
+
+/* Status badges for user_projects */
+.steam-status-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.steam-status-active { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.2); }
+.steam-status-review { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.15); }
+.steam-status-closed { background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.3); border: 1px solid rgba(255,255,255,0.08); }

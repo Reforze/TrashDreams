@@ -60,23 +60,26 @@ async function openProjectModal(projectId) {
       <p><strong>Автор:</strong> ${p.author || 'Аноним'}</p>
       <p><strong>Цель:</strong> ${p.goal}₽</p>
       <p><strong>Собрано:</strong> ${p.raised}₽ (${percent.toFixed(0)}%)</p>
-      <div class="progress-bar"><div class="progress" style="width:${percent}%;"></div></div>
+      <div class="pm-progress-bar"><div class="pm-progress" style="width:${percent}%;"></div></div>
       <p class="modal-desc">${p.description || 'Описание проекта появится позже...'}</p>
     </div>
 
-    <div class="modal-actions">
-      <button class="action-btn like-btn ${likedCls}" id="pm-like">
-        <span class="icon">&#9829;</span> <span id="pm-likes-count">${likesCount}</span>
+    <div class="pm-actions">
+      <button class="pm-btn pm-like-btn ${likedCls}" id="pm-like">
+        <span class="pm-btn-icon">♥</span>
+        <span class="pm-btn-label" id="pm-likes-count">${likesCount}</span>
       </button>
-      <button class="action-btn fav-btn ${favCls}" id="pm-fav">
-        <span class="icon">&#9734;</span> Избранное
+      <button class="pm-btn pm-fav-btn ${favCls}" id="pm-fav">
+        <span class="pm-btn-icon">★</span>
+        <span class="pm-btn-label">Избранное</span>
       </button>
-      <button class="action-btn support-btn" id="pm-support-toggle">
-        Поддержать
+      <button class="pm-btn pm-support-btn" id="pm-support-toggle">
+        <span class="pm-btn-icon">💰</span>
+        <span class="pm-btn-label">Поддержать</span>
       </button>
     </div>
 
-    <div class="support-form hidden" id="pm-support-form">
+    <div class="pm-support-form hidden" id="pm-support-form">
       <input type="number" id="pm-support-amount" placeholder="Сумма ₽" min="1">
       <button id="pm-support-send">Отправить</button>
     </div>
@@ -98,7 +101,8 @@ async function openProjectModal(projectId) {
   document.getElementById('pm-fav').addEventListener('click', _pmToggleFav);
   document.getElementById('pm-support-toggle').addEventListener('click', () => {
     if (!_modalUser) { showToast('Авторизуйтесь для поддержки', 'error'); return; }
-    document.getElementById('pm-support-form').classList.toggle('hidden');
+    const form = document.getElementById('pm-support-form');
+    form.classList.toggle('hidden');
   });
   document.getElementById('pm-support-send').addEventListener('click', _pmSendSupport);
 
@@ -111,18 +115,24 @@ async function openProjectModal(projectId) {
 
 async function _pmToggleLike() {
   if (!_modalUser) { showToast('Авторизуйтесь', 'error'); return; }
+  const btn = document.getElementById('pm-like');
+  btn.style.pointerEvents = 'none';
   const res = await api('likes.toggle', { method: 'POST', params: { id: _modalProjectId } });
+  btn.style.pointerEvents = '';
   if (res.success) {
-    document.getElementById('pm-like').classList.toggle('active', res.data.liked);
+    btn.classList.toggle('active', res.data.liked);
     document.getElementById('pm-likes-count').textContent = res.data.likes_count;
   }
 }
 
 async function _pmToggleFav() {
   if (!_modalUser) { showToast('Авторизуйтесь', 'error'); return; }
+  const btn = document.getElementById('pm-fav');
+  btn.style.pointerEvents = 'none';
   const res = await api('favorites.toggle', { method: 'POST', params: { id: _modalProjectId } });
+  btn.style.pointerEvents = '';
   if (res.success) {
-    document.getElementById('pm-fav').classList.toggle('active', res.data.favorited);
+    btn.classList.toggle('active', res.data.favorited);
     showToast(res.message);
   }
 }
@@ -136,7 +146,8 @@ async function _pmSendSupport() {
   if (res.success) {
     showToast(res.message);
     input.value = '';
-    document.getElementById('pm-support-form').classList.add('hidden');
+    const form = document.getElementById('pm-support-form');
+    if (form) form.classList.add('hidden');
     openProjectModal(_modalProjectId);
   } else {
     showToast(res.error, 'error');
@@ -216,67 +227,90 @@ async function _pmSendComment() {
     .modal-body strong { color: rgba(255,255,255,0.9); }
     .modal-desc { margin-top: 10px; line-height: 1.6; }
 
-    .modal-actions {
+    /* Progress bar in modal */
+    .pm-progress-bar {
+      background: rgba(255,255,255,0.08);
+      border-radius: 6px;
+      overflow: hidden;
+      height: 8px;
+      margin: 8px 0 12px;
+    }
+    .pm-progress {
+      height: 100%;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.7);
+      transition: width 0.6s ease;
+    }
+
+    /* Action buttons row */
+    .pm-actions {
       display: flex;
       justify-content: center;
-      gap: 10px;
-      padding: 12px 20px 8px;
+      gap: 12px;
+      padding: 14px 20px 10px;
       flex-wrap: wrap;
     }
-    .action-btn {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 8px 16px;
-      border-radius: 8px;
-      color: rgba(255,255,255,0.7);
-      font-family: 'SUSE Mono', monospace;
-      font-size: 0.85em;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
+    .pm-btn {
+      display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6);
+      font-family: 'SUSE Mono', monospace;
+      font-size: 0.88em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 500;
     }
-    .action-btn:hover {
+    .pm-btn:hover {
       background: rgba(255,255,255,0.12);
       color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .action-btn.active {
-      background: rgba(255,255,255,0.15);
+    .pm-btn.active {
+      background: rgba(255,255,255,0.18);
       border-color: rgba(255,255,255,0.4);
       color: #fff;
     }
-    .like-btn.active .icon { color: #ff6b6b; }
-    .fav-btn.active .icon { color: #ffd700; }
+    .pm-btn-icon {
+      font-size: 1.15em;
+      line-height: 1;
+    }
 
-    .support-form {
+    /* Support form */
+    .pm-support-form {
       display: flex;
       gap: 8px;
       padding: 8px 20px;
       justify-content: center;
     }
-    .support-form.hidden { display: none; }
-    .support-form input {
+    .pm-support-form.hidden { display: none; }
+    .pm-support-form input {
       background: rgba(0,0,0,0.4);
       border: 1px solid rgba(255,255,255,0.15);
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 10px 14px;
+      border-radius: 10px;
       color: #fff;
       font-family: 'SUSE Mono', monospace;
-      width: 120px;
+      width: 130px;
     }
-    .support-form input:focus { outline: none; border-color: rgba(255,255,255,0.4); }
-    .support-form button {
-      background: rgba(255,255,255,0.08);
+    .pm-support-form input:focus { outline: none; border-color: rgba(255,255,255,0.4); }
+    .pm-support-form button {
+      background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.3);
-      padding: 8px 16px;
-      border-radius: 8px;
+      padding: 10px 20px;
+      border-radius: 10px;
       color: #fff;
       cursor: pointer;
       font-family: 'SUSE Mono', monospace;
+      font-weight: 600;
       transition: all 0.3s;
     }
-    .support-form button:hover { background: #fff; color: #000; }
+    .pm-support-form button:hover { background: #fff; color: #000; }
 
     .comments-section {
       text-align: left;
