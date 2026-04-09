@@ -25,15 +25,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   }));
 
   const booksData = homeData.books.map(b => ({
-    type: 'book', title: b.title, desc: b.description, img: b.img
+    type: 'book', id: b.id, title: b.title, desc: b.description, img: b.img,
+    goal: b.goal || 0, raised: b.raised || 0
   }));
 
   const moviesData = homeData.movies.map(m => ({
-    type: 'movie', title: m.title, desc: m.description, img: m.img
+    type: 'movie', id: m.id, title: m.title, desc: m.description, img: m.img,
+    goal: m.goal || 0, raised: m.raised || 0
   }));
 
   const partnersData = homeData.partners.map(p => ({
-    type: 'partner', title: p.title, desc: p.description, img: p.img
+    type: 'partner', id: p.id, title: p.title, desc: p.description, img: p.img
   }));
 
   // ===================================
@@ -123,30 +125,50 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Regular slider cards for books/movies/partners
+  // Steam-style cards for books/movies/partners — same layout as projects
   function createSliderSection(data, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
     data.forEach(item => {
       const card = document.createElement("div");
-      card.classList.add("slider-card");
+      card.classList.add("steam-card");
 
-      let cardText = "";
-      if (item.type !== 'partner') {
-        const shortDesc = item.desc && item.desc.length > 50 ? item.desc.substring(0, 47) + "..." : (item.desc || "");
-        cardText = `<p>${shortDesc}</p>`;
-      }
+      const isPartner = item.type === 'partner';
+      const percent = !isPartner && item.goal > 0 ? Math.min((item.raised / item.goal) * 100, 100) : 0;
+      const detailUrl = `../project_detail/index.html?type=${item.type}&id=${item.id}`;
+
+      const statsHtml = isPartner ? `
+          <div class="steam-card-desc" style="color:rgba(255,255,255,0.5); font-size:0.8rem; margin-top:4px;">Партнёр</div>
+      ` : `
+          <div class="steam-card-stats">
+            <span class="steam-raised">${item.raised}₽</span>
+            <span class="steam-goal">из ${item.goal}₽</span>
+          </div>
+          <div class="steam-progress-bar">
+            <div class="steam-progress" style="width:${percent}%;"></div>
+          </div>
+      `;
 
       card.innerHTML = `
-        <img src="${item.img}" alt="${item.title}">
-        <div class="card-info">
-          <h3>${item.title}</h3>
-          ${cardText}
+        <div class="steam-card-img">
+          <img src="${item.img || '../assets/images/logo.ico'}" alt="${item.title}">
+          <div class="steam-card-overlay"></div>
+        </div>
+        <div class="steam-card-body">
+          <h3 class="steam-card-title">${item.title}</h3>
+          ${statsHtml}
+          <div class="steam-card-footer">
+            ${isPartner ? '' : `<span class="steam-percent">${percent.toFixed(0)}%</span>`}
+            <a class="steam-detail-btn" href="${detailUrl}">Подробнее</a>
+          </div>
         </div>
       `;
 
-      card.addEventListener("click", () => openModal(item));
+      card.addEventListener("click", (e) => {
+        if (e.target.closest('.steam-detail-btn')) return;
+        window.location.href = detailUrl;
+      });
       container.appendChild(card);
     });
   }
@@ -166,7 +188,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-target");
       const container = document.getElementById(targetId);
-      const scrollAmount = 300;
+      const scrollAmount = 340;
 
       if (btn.classList.contains("left")) {
         container.scrollBy({ left: -scrollAmount, behavior: "smooth" });

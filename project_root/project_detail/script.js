@@ -1,118 +1,154 @@
 let _user = null;
-let _projectId = null;
+let _itemId = null;
+let _itemType = null; // 'project', 'book', 'movie', 'partner'
+
+const typeLabels = { project: 'Проект', book: 'Книга', movie: 'Фильм', partner: 'Партнёр' };
 
 document.addEventListener('DOMContentLoaded', async () => {
   const params = new URLSearchParams(window.location.search);
-  _projectId = params.get('id');
+  _itemId = params.get('id');
+  _itemType = params.get('type') || 'project';
 
-  if (!_projectId) {
-    document.querySelector('.detail-main h1').textContent = 'Проект не найден';
+  if (!_itemId) {
+    document.getElementById('detail-title').textContent = 'Не найдено';
     return;
   }
 
   _user = await checkAuth();
 
-  const res = await api('projects.get', { params: { id: _projectId } });
+  // Fetch data based on type
+  const apiAction = _itemType === 'project' ? 'projects.get'
+    : _itemType === 'book' ? 'books.get'
+    : _itemType === 'movie' ? 'movies.get'
+    : _itemType === 'partner' ? 'partners.get'
+    : 'projects.get';
+
+  const res = await api(apiAction, { params: { id: _itemId } });
   if (!res.success) {
-    document.getElementById('detail-title').textContent = 'Проект не найден';
+    document.getElementById('detail-title').textContent = 'Не найдено';
     return;
   }
 
   const p = res.data;
-  const percent = Math.min((p.raised / p.goal) * 100, 100);
+  const isPartner = _itemType === 'partner';
+  const goal = p.goal || 0;
+  const raised = p.raised || 0;
+  const percent = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
 
   document.title = `${p.title} | TrashDream's`;
 
   document.getElementById('detail-img').src = p.img || '../assets/images/logo.ico';
   document.getElementById('detail-title').textContent = p.title;
-  document.getElementById('detail-author').textContent = `Автор: ${p.author || 'Аноним'}`;
-  document.getElementById('detail-description').textContent = p.description || 'Описание проекта появится позже...';
-  document.getElementById('detail-raised').textContent = `${p.raised}₽`;
-  document.getElementById('detail-goal').textContent = `из ${p.goal}₽`;
-  document.getElementById('detail-progress').style.width = `${percent}%`;
-  document.getElementById('detail-percent').textContent = `${percent.toFixed(0)}%`;
-  document.getElementById('detail-likes-count').textContent = p.likes_count || 0;
+  document.getElementById('detail-author').textContent = p.author
+    ? `Автор: ${p.author}`
+    : `Тип: ${typeLabels[_itemType] || _itemType}`;
+  document.getElementById('detail-description').textContent = p.description || 'Описание появится позже...';
 
-  if (p.user_liked) document.getElementById('detail-like-btn').classList.add('active');
-  if (p.user_favorited) document.getElementById('detail-fav-btn').classList.add('active');
-
-  // Support toggle
-  document.getElementById('detail-support-btn').addEventListener('click', () => {
-    if (!_user) { showToast('Авторизуйтесь для поддержки', 'error'); return; }
-    document.getElementById('detail-support-form').classList.toggle('hidden');
-  });
-
-  // Support send
-  document.getElementById('detail-support-send').addEventListener('click', async () => {
-    const input = document.getElementById('detail-support-amount');
-    const amount = parseFloat(input.value);
-    if (!amount || amount <= 0) { showToast('Введите сумму', 'error'); return; }
-
-    const res = await api('projects.support', { method: 'POST', params: { id: _projectId }, body: { amount } });
-    if (res.success) {
-      showToast(res.message);
-      input.value = '';
-      document.getElementById('detail-support-form').classList.add('hidden');
-      location.reload();
-    } else {
-      showToast(res.error, 'error');
-    }
-  });
-
-  // Like toggle
-  document.getElementById('detail-like-btn').addEventListener('click', async () => {
-    if (!_user) { showToast('Авторизуйтесь', 'error'); return; }
-    const btn = document.getElementById('detail-like-btn');
-    btn.style.pointerEvents = 'none';
-    const res = await api('likes.toggle', { method: 'POST', params: { id: _projectId } });
-    btn.style.pointerEvents = '';
-    if (res.success) {
-      btn.classList.toggle('active', res.data.liked);
-      document.getElementById('detail-likes-count').textContent = res.data.likes_count;
-    }
-  });
-
-  // Favorite toggle
-  document.getElementById('detail-fav-btn').addEventListener('click', async () => {
-    if (!_user) { showToast('Авторизуйтесь', 'error'); return; }
-    const btn = document.getElementById('detail-fav-btn');
-    btn.style.pointerEvents = 'none';
-    const res = await api('favorites.toggle', { method: 'POST', params: { id: _projectId } });
-    btn.style.pointerEvents = '';
-    if (res.success) {
-      btn.classList.toggle('active', res.data.favorited);
-      showToast(res.message);
-    }
-  });
-
-  // Comments
-  if (_user) {
-    document.getElementById('detail-comment-form').classList.remove('hidden');
+  // Партнёры — без счётчика сборов
+  if (isPartner) {
+    document.getElementById('detail-raised').parentElement.style.display = 'none';
+    const progressBar = document.querySelector('.detail-progress-bar');
+    if (progressBar) progressBar.style.display = 'none';
+    const percentEl = document.getElementById('detail-percent');
+    if (percentEl) percentEl.style.display = 'none';
   } else {
-    document.getElementById('detail-auth-hint').classList.remove('hidden');
+    document.getElementById('detail-raised').textContent = `${raised}₽`;
+    document.getElementById('detail-goal').textContent = `из ${goal}₽`;
+    document.getElementById('detail-progress').style.width = `${percent}%`;
+    document.getElementById('detail-percent').textContent = `${percent.toFixed(0)}%`;
   }
 
-  loadComments();
+  // Project-only features: likes, favorites, support, comments
+  const isProject = _itemType === 'project';
 
-  document.getElementById('detail-comment-send').addEventListener('click', async () => {
-    const textarea = document.getElementById('detail-comment-text');
-    const text = textarea.value.trim();
-    if (!text) { showToast('Введите текст', 'error'); return; }
+  if (isProject) {
+    document.getElementById('detail-likes-count').textContent = p.likes_count || 0;
+    if (p.user_liked) document.getElementById('detail-like-btn').classList.add('active');
+    if (p.user_favorited) document.getElementById('detail-fav-btn').classList.add('active');
 
-    const res = await api('comments.add', { method: 'POST', params: { id: _projectId }, body: { text } });
-    if (res.success) {
-      textarea.value = '';
-      showToast('Комментарий добавлен');
-      loadComments();
+    // Support toggle
+    document.getElementById('detail-support-btn').addEventListener('click', () => {
+      if (!_user) { showToast('Авторизуйтесь для поддержки', 'error'); return; }
+      document.getElementById('detail-support-form').classList.toggle('hidden');
+    });
+
+    document.getElementById('detail-support-send').addEventListener('click', async () => {
+      const input = document.getElementById('detail-support-amount');
+      const amount = parseFloat(input.value);
+      if (!amount || amount <= 0) { showToast('Введите сумму', 'error'); return; }
+
+      const res = await api('projects.support', { method: 'POST', params: { id: _itemId }, body: { amount } });
+      if (res.success) {
+        showToast(res.message);
+        input.value = '';
+        document.getElementById('detail-support-form').classList.add('hidden');
+        location.reload();
+      } else {
+        showToast(res.error, 'error');
+      }
+    });
+
+    // Like toggle
+    document.getElementById('detail-like-btn').addEventListener('click', async () => {
+      if (!_user) { showToast('Авторизуйтесь', 'error'); return; }
+      const btn = document.getElementById('detail-like-btn');
+      btn.style.pointerEvents = 'none';
+      const res = await api('likes.toggle', { method: 'POST', params: { id: _itemId } });
+      btn.style.pointerEvents = '';
+      if (res.success) {
+        btn.classList.toggle('active', res.data.liked);
+        document.getElementById('detail-likes-count').textContent = res.data.likes_count;
+      }
+    });
+
+    // Favorite toggle
+    document.getElementById('detail-fav-btn').addEventListener('click', async () => {
+      if (!_user) { showToast('Авторизуйтесь', 'error'); return; }
+      const btn = document.getElementById('detail-fav-btn');
+      btn.style.pointerEvents = 'none';
+      const res = await api('favorites.toggle', { method: 'POST', params: { id: _itemId } });
+      btn.style.pointerEvents = '';
+      if (res.success) {
+        btn.classList.toggle('active', res.data.favorited);
+        showToast(res.message);
+      }
+    });
+
+    // Comments
+    if (_user) {
+      document.getElementById('detail-comment-form').classList.remove('hidden');
     } else {
-      showToast(res.error, 'error');
+      document.getElementById('detail-auth-hint').classList.remove('hidden');
     }
-  });
+
+    loadComments();
+
+    document.getElementById('detail-comment-send').addEventListener('click', async () => {
+      const textarea = document.getElementById('detail-comment-text');
+      const text = textarea.value.trim();
+      if (!text) { showToast('Введите текст', 'error'); return; }
+
+      const res = await api('comments.add', { method: 'POST', params: { id: _itemId }, body: { text } });
+      if (res.success) {
+        textarea.value = '';
+        showToast('Комментарий добавлен');
+        loadComments();
+      } else {
+        showToast(res.error, 'error');
+      }
+    });
+  } else {
+    // Non-project items: hide project-only UI
+    document.getElementById('detail-support-btn').style.display = 'none';
+    document.getElementById('detail-like-btn').style.display = 'none';
+    document.getElementById('detail-fav-btn').style.display = 'none';
+    document.querySelector('.detail-comments').style.display = 'none';
+  }
 });
 
 async function loadComments() {
   const list = document.getElementById('detail-comments-list');
-  const res = await api('comments.list', { params: { id: _projectId } });
+  const res = await api('comments.list', { params: { id: _itemId } });
 
   document.getElementById('detail-comments-title').textContent =
     `Комментарии (${res.success ? res.data.length : 0})`;

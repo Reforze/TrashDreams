@@ -288,6 +288,17 @@ try {
             handleHome($db);
             break;
 
+        // ---- КНИГИ / ФИЛЬМЫ / ПАРТНЁРЫ ----
+        case 'books.get':
+            handleItemGet($db, 'books', $id);
+            break;
+        case 'movies.get':
+            handleItemGet($db, 'movies', $id);
+            break;
+        case 'partners.get':
+            handleItemGet($db, 'partners', $id);
+            break;
+
         default:
             jsonError('Неизвестный action: ' . htmlspecialchars($action), 404);
     }

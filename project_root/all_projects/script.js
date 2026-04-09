@@ -2,6 +2,12 @@ const container = document.getElementById("projects-container");
 const searchInput = document.getElementById("search-input");
 const categoryFilter = document.getElementById("category-filter");
 
+// Читаем ?cat= из URL и устанавливаем фильтр категории
+const urlCat = new URLSearchParams(window.location.search).get('cat');
+if (urlCat && categoryFilter) {
+  categoryFilter.value = urlCat;
+}
+
 async function loadProjects() {
   const search = searchInput.value.trim();
   const category = categoryFilter.value;

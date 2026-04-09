@@ -258,17 +258,9 @@ function initDropdownMenu() {}
     /* Active nav underline */
     .nav a.active-nav {
       color: #fff !important;
-      position: relative;
-    }
-    .nav a.active-nav::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: #fff;
-      border-radius: 1px;
+      text-decoration: underline;
+      text-underline-offset: 6px;
+      text-decoration-thickness: 2px;
     }
 
     /* Dropdown trigger */

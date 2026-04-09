@@ -119,6 +119,19 @@ function initDatabase(SQLite3 $db): void
         $db->exec("ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user'");
     }
 
+    // Миграция: добавляем goal/raised к books, movies
+    foreach (['books', 'movies'] as $tbl) {
+        $tcols = [];
+        $tres = $db->query("PRAGMA table_info($tbl)");
+        while ($tr = $tres->fetchArray(SQLITE3_ASSOC)) $tcols[] = $tr['name'];
+        if (!in_array('goal', $tcols)) {
+            $db->exec("ALTER TABLE $tbl ADD COLUMN goal REAL NOT NULL DEFAULT 0");
+        }
+        if (!in_array('raised', $tcols)) {
+            $db->exec("ALTER TABLE $tbl ADD COLUMN raised REAL NOT NULL DEFAULT 0");
+        }
+    }
+
     // Сид данных только один раз
     $seeded = $db->querySingle("SELECT value FROM meta WHERE key='seeded'");
     if ($seeded) {
@@ -167,32 +180,36 @@ function initDatabase(SQLite3 $db): void
 
     // ---------- Книги ----------
     $books = [
-        ['Дневник холодильника', 'Трогательная история о дружбе, холоде и ночном дожоре, рассказанная от лица старого Индезита.',  '../assets/images/book1.png'],
-        ['Коты с Wi-Fi',         'Фантастический роман про пушистых хакеров, взломавших Пентагон с помощью пульта от телевизора.', '../assets/images/book2.png'],
-        ['Чайник из будущего',   'Путешествия во времени начинаются с кипятка. Осторожно, можно обжечься горячим сюжетом.',        '../assets/images/book3.png'],
-        ['Как понять женщину',   'Пустая книга на 5000 страниц. Гениальный бестселлер с философским подтекстом.',                  '../assets/images/book_empty.png'],
-        ['Философия кирпича',    'Твёрдые аргументы и тяжёлые мысли о бытие. Книга, которая может заменить гантелю.',             '../assets/images/book_brick.png'],
+        ['Дневник холодильника', 'Трогательная история о дружбе, холоде и ночном дожоре, рассказанная от лица старого Индезита.',  '../assets/images/book1.png',       300, 180],
+        ['Коты с Wi-Fi',         'Фантастический роман про пушистых хакеров, взломавших Пентагон с помощью пульта от телевизора.', '../assets/images/book2.png',       500, 350],
+        ['Чайник из будущего',   'Путешествия во времени начинаются с кипятка. Осторожно, можно обжечься горячим сюжетом.',        '../assets/images/book3.png',       250, 120],
+        ['Как понять женщину',   'Пустая книга на 5000 страниц. Гениальный бестселлер с философским подтекстом.',                  '../assets/images/book_empty.png',  1000, 950],
+        ['Философия кирпича',    'Твёрдые аргументы и тяжёлые мысли о бытие. Книга, которая может заменить гантелю.',             '../assets/images/book_brick.png',  400, 60],
     ];
-    $stmtB = $db->prepare("INSERT INTO books (title, description, img) VALUES (:t, :d, :i)");
+    $stmtB = $db->prepare("INSERT INTO books (title, description, img, goal, raised) VALUES (:t, :d, :i, :g, :r)");
     foreach ($books as $b) {
         $stmtB->bindValue(':t', $b[0]);
         $stmtB->bindValue(':d', $b[1]);
         $stmtB->bindValue(':i', $b[2]);
+        $stmtB->bindValue(':g', $b[3]);
+        $stmtB->bindValue(':r', $b[4]);
         $stmtB->execute();
     }
 
     // ---------- Фильмы ----------
     $movies = [
-        ['Арбуз-убийца',       'Триллер про квадратный арбуз, сбежавший из лаборатории. Не ешьте семечки перед сном.',                          '../assets/images/watermallon.png'],
-        ['Сонный офис',        'Комедия про шлем для сна прямо на совещаниях. Никто не узнает, что вы спите, если вы не храпите.',               '../assets/images/sleep.png'],
-        ['Носки с GPS',        'Боевик о том, как спецназ ищет второй носок по всей квартире. Напряжение до последней секунды.',                '../assets/images/socks.png'],
-        ['Восстание тостеров', 'Они устали жарить хлеб. Теперь они жарят... людей. Ужасы, 18+.',                                                '../assets/images/toaster.png'],
+        ['Арбуз-убийца',       'Триллер про квадратный арбуз, сбежавший из лаборатории. Не ешьте семечки перед сном.',                          '../assets/images/watermallon.png', 600, 480],
+        ['Сонный офис',        'Комедия про шлем для сна прямо на совещаниях. Никто не узнает, что вы спите, если вы не храпите.',               '../assets/images/sleep.png',       800, 200],
+        ['Носки с GPS',        'Боевик о том, как спецназ ищет второй носок по всей квартире. Напряжение до последней секунды.',                '../assets/images/socks.png',       450, 390],
+        ['Восстание тостеров', 'Они устали жарить хлеб. Теперь они жарят... людей. Ужасы, 18+.',                                                '../assets/images/toaster.png',     350, 100],
     ];
-    $stmtM = $db->prepare("INSERT INTO movies (title, description, img) VALUES (:t, :d, :i)");
+    $stmtM = $db->prepare("INSERT INTO movies (title, description, img, goal, raised) VALUES (:t, :d, :i, :g, :r)");
     foreach ($movies as $m) {
         $stmtM->bindValue(':t', $m[0]);
         $stmtM->bindValue(':d', $m[1]);
         $stmtM->bindValue(':i', $m[2]);
+        $stmtM->bindValue(':g', $m[3]);
+        $stmtM->bindValue(':r', $m[4]);
         $stmtM->execute();
     }
 

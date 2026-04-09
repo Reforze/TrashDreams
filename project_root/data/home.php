@@ -12,6 +12,19 @@ function handleStats(SQLite3 $db): void
     ]);
 }
 
+function handleItemGet(SQLite3 $db, string $table, ?int $id): void
+{
+    if (!$id) jsonError('id обязателен', 400);
+    $allowed = ['books', 'movies', 'partners'];
+    if (!in_array($table, $allowed)) jsonError('Неизвестный тип', 400);
+
+    $stmt = $db->prepare("SELECT * FROM $table WHERE id = :id");
+    $stmt->bindValue(':id', $id, SQLITE3_INTEGER);
+    $row = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
+    if (!$row) jsonError('Не найдено', 404);
+    jsonOk($row);
+}
+
 function handleHome(SQLite3 $db): void
 {
     $featured = fetchProjects($db, 'p.is_featured = 1', [], 'p.raised DESC');
