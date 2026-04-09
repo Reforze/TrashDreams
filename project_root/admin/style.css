@@ -213,6 +213,40 @@ body {
   background: rgba(255,255,255,0.1);
   color: #fff;
 }
+.btn-delete {
+  padding: 5px 10px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8em;
+  font-family: 'SUSE Mono', monospace;
+  transition: all 0.2s;
+  background: transparent;
+  color: rgba(255,255,255,0.4);
+}
+.btn-delete:hover {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+}
+.btn-toggle {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 1.1em;
+  cursor: pointer;
+  color: rgba(255,255,255,0.3);
+  transition: all 0.2s;
+}
+.btn-toggle:hover {
+  border-color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.7);
+}
+.btn-toggle.active {
+  color: #fff;
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.1);
+}
 
 /* Модалка */
 .modal {

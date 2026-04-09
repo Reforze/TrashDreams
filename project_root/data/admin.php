@@ -20,6 +20,13 @@ function handleAdminProjects(SQLite3 $db): void
         $params[':search'] = "%$search%";
     }
 
+    $special = trim($_GET['special'] ?? '');
+    if ($special === 'featured') {
+        $conditions[] = "p.is_featured = 1";
+    } elseif ($special === 'editor') {
+        $conditions[] = "p.is_editor_choice = 1";
+    }
+
     jsonOk(fetchProjects($db, implode(' AND ', $conditions), $params, 'p.created_at DESC', 200));
 }
 

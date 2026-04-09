@@ -246,14 +246,28 @@ body {
 
 .hidden { display: none; }
 
+/* Favorites */
+.favorites-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 30px 10px;
+}
+.favorites-section h2 { color: #fff; margin-bottom: 20px; }
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  justify-items: center;
+}
+
 /* Logout */
 .logout-section { text-align: center; padding-bottom: 40px; }
 .logout-btn {
   padding: 14px 40px;
   background: transparent;
-  border: 1px solid rgba(255, 80, 80, 0.5);
+  border: 1px solid rgba(255,255,255,0.3);
   border-radius: 10px;
-  color: rgba(255, 80, 80, 0.8);
+  color: rgba(255,255,255,0.5);
   font-size: 1em;
   cursor: pointer;
   transition: all 0.3s;

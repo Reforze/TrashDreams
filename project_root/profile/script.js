@@ -61,6 +61,7 @@ async function loadProfile() {
 
   // Загрузка проектов пользователя
   loadUserProjects();
+  loadFavorites();
 }
 
 // Загрузка проектов
@@ -108,6 +109,54 @@ async function loadUserProjects() {
 
   } catch (e) {
     console.error('Ошибка загрузки проектов:', e);
+  }
+}
+
+// Загрузка избранного
+async function loadFavorites() {
+  try {
+    const res = await api('projects.list', { params: { favorites: '1' } });
+    if (!res.success) return;
+
+    const projects = res.data || [];
+    const grid = document.getElementById('favorites-grid');
+    const noFavs = document.getElementById('no-favorites');
+
+    if (projects.length === 0) {
+      grid.classList.add('hidden');
+      noFavs.classList.remove('hidden');
+      return;
+    }
+
+    grid.innerHTML = projects.map(p => {
+      const pct = p.goal > 0 ? Math.min(100, Math.round((p.raised / p.goal) * 100)) : 0;
+      const likes = p.likes_count || 0;
+      const comments = p.comments_count || 0;
+      return `
+        <div class="steam-card">
+          <div class="steam-card-img">
+            <img src="${p.img || '../assets/images/logo.ico'}" alt="${escapeHtml(p.title)}">
+            <div class="steam-card-overlay"></div>
+          </div>
+          <div class="steam-card-body">
+            <h3 class="steam-card-title">${escapeHtml(p.title)}</h3>
+            <div class="steam-card-stats">
+              <span class="steam-raised">${Number(p.raised).toLocaleString('ru-RU')}₽</span>
+              <span class="steam-goal">из ${Number(p.goal).toLocaleString('ru-RU')}₽</span>
+            </div>
+            <div class="steam-progress-bar">
+              <div class="steam-progress" style="width:${pct}%;"></div>
+            </div>
+            <div class="steam-card-footer">
+              <span class="steam-meta">&#9829; ${likes} &nbsp; &#128172; ${comments}</span>
+              <a class="steam-detail-btn" href="../project_detail/index.html?id=${p.id}">Подробнее</a>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+  } catch (e) {
+    console.error('Ошибка загрузки избранного:', e);
   }
 }
 

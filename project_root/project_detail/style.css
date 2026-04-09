@@ -114,7 +114,7 @@ body::-webkit-scrollbar { width: 0; background: transparent; }
   padding: 20px 0;
 }
 .detail-funding {
-  background: rgba(15,15,20,0.9);
+  background: rgba(10,10,10,0.9);
   border: 1px solid rgba(255,255,255,0.08);
   border-radius: 16px;
   padding: 24px;

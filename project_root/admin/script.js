@@ -70,12 +70,15 @@ async function loadStats() {
   }
 }
 
+const specialFilter = document.getElementById('special-filter');
+
 async function loadProjects() {
   const search = searchInput.value.trim();
   const status = statusFilter.value;
+  const special = specialFilter.value;
 
   try {
-    const res = await api('admin.projects', { params: { search, status } });
+    const res = await api('admin.projects', { params: { search, status, special } });
     if (res.success) {
       renderTable(res.data);
     }
@@ -102,7 +105,8 @@ function renderTable(list) {
       <td>${escapeHtml(p.author || '—')}</td>
       <td>${categoryNames[p.category] || p.category}</td>
       <td><span class="status-badge ${statusClass}">${statusLabels[p.status] || p.status}</span></td>
-      <td>${Number(p.goal).toLocaleString('ru-RU')}</td>
+      <td><button class="btn-toggle ${p.is_featured ? 'active' : ''}" data-action="featured" data-id="${p.id}" data-val="${p.is_featured ? 0 : 1}" title="На главной">${p.is_featured ? '★' : '☆'}</button></td>
+      <td><button class="btn-toggle ${p.is_editor_choice ? 'active' : ''}" data-action="editor" data-id="${p.id}" data-val="${p.is_editor_choice ? 0 : 1}" title="Выбор редакции">${p.is_editor_choice ? '★' : '☆'}</button></td>
       <td>${Number(p.raised).toLocaleString('ru-RU')} (${pct}%)</td>
       <td class="actions-cell">
         ${p.status === 'review' ? `
@@ -110,6 +114,7 @@ function renderTable(list) {
           <button class="btn-reject" data-id="${p.id}" title="Отклонить">Отклонить</button>
         ` : ''}
         <button class="btn-details" data-id="${p.id}" title="Подробнее">Подробнее</button>
+        <button class="btn-delete" data-id="${p.id}" title="Удалить">✕</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -127,6 +132,33 @@ function renderTable(list) {
       e.stopPropagation();
       const proj = list.find(p => p.id == btn.dataset.id);
       if (proj) openModal(proj);
+    });
+  });
+  tbody.querySelectorAll('.btn-toggle').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const action = btn.dataset.action === 'featured' ? 'admin.set_featured' : 'admin.set_editor';
+      const res = await api(action, { method: 'POST', params: { id: btn.dataset.id }, body: { value: parseInt(btn.dataset.val) } });
+      if (res.success) {
+        showToast(res.message);
+        loadProjects();
+      } else {
+        showToast(res.error || 'Ошибка', 'error');
+      }
+    });
+  });
+  tbody.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      if (!confirm('Удалить проект безвозвратно?')) return;
+      const res = await api('admin.delete_project', { method: 'POST', params: { id: btn.dataset.id } });
+      if (res.success) {
+        showToast('Проект удалён');
+        loadProjects();
+        loadStats();
+      } else {
+        showToast(res.error || 'Ошибка', 'error');
+      }
     });
   });
 }
@@ -246,6 +278,7 @@ modal.addEventListener('click', e => { if (e.target === modal) modal.classList.r
 // Filters
 searchInput.addEventListener('input', loadProjects);
 statusFilter.addEventListener('change', loadProjects);
+specialFilter.addEventListener('change', loadProjects);
 
 function escapeHtml(str) {
   const d = document.createElement('div');
