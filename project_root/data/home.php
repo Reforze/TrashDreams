@@ -6,8 +6,8 @@
 function handleStats(SQLite3 $db): void
 {
     jsonOk([
-        'projects' => (int)  $db->querySingle("SELECT COUNT(*) FROM projects"),
-        'raised'   => (float)$db->querySingle("SELECT COALESCE(SUM(raised), 0) FROM projects"),
+        'projects' => (int)  $db->querySingle("SELECT COUNT(*) FROM projects WHERE status = 'active'"),
+        'raised'   => (float)$db->querySingle("SELECT COALESCE(SUM(raised), 0) FROM projects WHERE status = 'active'"),
         'users'    => (int)  $db->querySingle("SELECT COUNT(*) FROM users"),
     ]);
 }
@@ -27,7 +27,7 @@ function handleItemGet(SQLite3 $db, string $table, ?int $id): void
 
 function handleHome(SQLite3 $db): void
 {
-    $featured = fetchProjects($db, 'p.is_featured = 1', [], 'p.raised DESC');
+    $featured = fetchProjects($db, "p.is_featured = 1 AND p.status = 'active'", [], 'p.raised DESC');
 
     $books = [];
     $res   = $db->query("SELECT * FROM books");

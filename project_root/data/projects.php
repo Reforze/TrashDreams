@@ -41,8 +41,23 @@ function handleProjectsList(SQLite3 $db): void
     $sort     = $_GET['sort']          ?? 'newest';
     $status   = trim($_GET['status']   ?? '');
 
-    $conditions = ['1=1'];
+    $conditions = [];
     $params     = [];
+
+    // Свои проекты — показываем все статусы, чужие — только active
+    $mine = trim($_GET['mine'] ?? '');
+    if ($mine === '1' && !empty($_SESSION['user_id'])) {
+        $conditions[] = "p.user_id = :uid";
+        $params[':uid'] = (int)$_SESSION['user_id'];
+    } else {
+        // По умолчанию показываем только активные проекты
+        if ($status !== '') {
+            $conditions[] = "p.status = :status";
+            $params[':status'] = $status;
+        } else {
+            $conditions[] = "p.status = 'active'";
+        }
+    }
 
     if ($search !== '') {
         $conditions[] = "p.title LIKE :search";
@@ -51,16 +66,6 @@ function handleProjectsList(SQLite3 $db): void
     if ($category !== '' && $category !== 'all') {
         $conditions[] = "p.category = :cat";
         $params[':cat'] = $category;
-    }
-    if ($status !== '') {
-        $conditions[] = "p.status = :status";
-        $params[':status'] = $status;
-    }
-
-    $mine = trim($_GET['mine'] ?? '');
-    if ($mine === '1' && !empty($_SESSION['user_id'])) {
-        $conditions[] = "p.user_id = :uid";
-        $params[':uid'] = (int)$_SESSION['user_id'];
     }
 
     // Избранное текущего пользователя
@@ -78,12 +83,13 @@ function handleProjectsList(SQLite3 $db): void
         default     => 'p.created_at DESC',
     };
 
-    jsonOk(fetchProjects($db, implode(' AND ', $conditions), $params, $order));
+    $where = count($conditions) ? implode(' AND ', $conditions) : '1=1';
+    jsonOk(fetchProjects($db, $where, $params, $order));
 }
 
 function handleProjectsFeatured(SQLite3 $db): void
 {
-    jsonOk(fetchProjects($db, 'p.is_featured = 1', [], 'p.raised DESC'));
+    jsonOk(fetchProjects($db, "p.is_featured = 1 AND p.status = 'active'", [], 'p.raised DESC'));
 }
 
 function handleProjectsNew(SQLite3 $db): void
@@ -98,7 +104,7 @@ function handleProjectsDiscussed(SQLite3 $db): void
 
 function handleProjectsEditorChoice(SQLite3 $db): void
 {
-    jsonOk(fetchProjects($db, 'p.is_editor_choice = 1', [], 'p.created_at DESC'));
+    jsonOk(fetchProjects($db, "p.is_editor_choice = 1 AND p.status = 'active'", [], 'p.created_at DESC'));
 }
 
 function handleProjectGet(SQLite3 $db, ?int $id): void
@@ -117,6 +123,20 @@ function handleProjectGet(SQLite3 $db, ?int $id): void
     $row = $stmt->execute()->fetchArray(SQLITE3_ASSOC);
 
     if (!$row) jsonError('Проект не найден', 404);
+
+    // Проект на модерации/отклонён — доступен только автору и админу
+    if ($row['status'] !== 'active') {
+        $uid = !empty($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+        $isOwner = (int)$row['user_id'] === $uid;
+        $isAdmin = false;
+        if ($uid) {
+            $roleCheck = $db->querySingle("SELECT role FROM users WHERE id = $uid");
+            $isAdmin = $roleCheck === 'admin';
+        }
+        if (!$isOwner && !$isAdmin) {
+            jsonError('Проект недоступен', 403);
+        }
+    }
 
     // Проверяем лайк/избранное текущего пользователя
     $row['user_liked']     = false;

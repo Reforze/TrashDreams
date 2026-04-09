@@ -84,8 +84,8 @@ body {
   color: rgba(255,255,255,0.5);
   font-size: 0.85em;
 }
-.stat-review { border-color: rgba(255,200,50,0.3); }
-.stat-review h3 { color: #ffc832; }
+.stat-review { border-color: rgba(255,255,255,0.2); }
+.stat-review h3 { color: rgba(255,255,255,0.6); }
 
 /* Фильтры */
 .filter-bar {
@@ -140,7 +140,7 @@ body {
   background: rgba(255,255,255,0.03);
 }
 .projects-table tbody tr.row-review {
-  background: rgba(255,200,50,0.03);
+  background: rgba(255,255,255,0.02);
 }
 .projects-table td {
   padding: 10px;
@@ -172,7 +172,7 @@ body {
   white-space: nowrap;
 }
 .status-active { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.2); }
-.status-review { background: rgba(255,200,50,0.15); color: #ffc832; border: 1px solid rgba(255,200,50,0.3); }
+.status-review { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2); }
 .status-closed { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.1); }
 
 /* Кнопки в таблице */
@@ -202,12 +202,12 @@ body {
   color: #000;
 }
 .btn-reject {
-  border-color: rgba(255,80,80,0.4);
-  color: rgba(255,80,80,0.8);
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.5);
 }
 .btn-reject:hover {
-  background: rgba(255,80,80,0.15);
-  color: #ff5050;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }
 .btn-details:hover {
   background: rgba(255,255,255,0.1);
@@ -346,19 +346,19 @@ body {
   color: #000;
 }
 .modal-btn.reject {
-  border-color: rgba(255,200,50,0.4);
-  color: #ffc832;
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.6);
 }
 .modal-btn.reject:hover {
-  background: rgba(255,200,50,0.15);
+  background: rgba(255,255,255,0.1);
 }
 .modal-btn.delete {
-  border-color: rgba(255,80,80,0.4);
-  color: rgba(255,80,80,0.8);
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.5);
 }
 .modal-btn.delete:hover {
-  background: rgba(255,80,80,0.15);
-  color: #ff5050;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
 }
 
 /* Empty message */

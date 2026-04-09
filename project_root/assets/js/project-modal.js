@@ -349,12 +349,12 @@ async function _pmSendComment() {
       margin-left: auto;
       background: none;
       border: none;
-      color: rgba(255,80,80,0.6);
+      color: rgba(255,255,255,0.4);
       font-size: 1.1em;
       cursor: pointer;
       padding: 0 4px;
     }
-    .comment-delete:hover { color: #ff5050; }
+    .comment-delete:hover { color: #fff; }
     .comment p { color: rgba(255,255,255,0.7); font-size: 0.9em; line-height: 1.5; }
 
     .comment-form {
@@ -424,11 +424,11 @@ async function _pmSendComment() {
     }
     .modal-btn.edit:hover { background: #fff; color: #000; }
     .modal-btn.delete {
-      background: rgba(255, 80, 80, 0.1);
-      border: 1px solid rgba(255,80,80,0.3);
-      color: rgba(255,80,80,0.8);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.5);
     }
-    .modal-btn.delete:hover { background: rgba(255,80,80,0.2); color: #ff5050; }
+    .modal-btn.delete:hover { background: rgba(255,255,255,0.1); color: #fff; }
   `;
   document.head.appendChild(style);
 })();

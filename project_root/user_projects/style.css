@@ -146,7 +146,7 @@ h2 { color: #fff; }
   text-transform: uppercase;
 }
 .status-active { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); border: 1px solid rgba(255,255,255,0.2); }
-.status-review { background: rgba(255,200,50,0.15); color: #ffc832; border: 1px solid rgba(255,200,50,0.3); }
+.status-review { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); border: 1px solid rgba(255,255,255,0.2); }
 .status-closed { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.4); border: 1px solid rgba(255,255,255,0.1); }
 
 /* Progress */
@@ -228,11 +228,11 @@ h2 { color: #fff; }
 }
 .modal-btn.edit:hover { background: #fff; color: #000; }
 .modal-btn.delete {
-  background: rgba(255, 80, 80, 0.1);
-  border: 1px solid rgba(255,80,80,0.3);
-  color: rgba(255,80,80,0.8);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.5);
 }
-.modal-btn.delete:hover { background: rgba(255,80,80,0.2); color: #ff5050; }
+.modal-btn.delete:hover { background: rgba(255,255,255,0.1); color: #fff; }
 
 /* Dropdown */
 .dropdown-menu {
